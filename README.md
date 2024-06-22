@@ -1,5 +1,5 @@
 # micropython-aes-cmac
-Run aes using the cryptolib library on micropython. Use a compatible CMAC script without external dependencies.
+Run AES using the cryptolib library on micropython. Use a compatible CMAC script without external dependencies.
 
 ## Prerequisites
 - `NUCLEO_L476RG` Development Board
@@ -53,7 +53,7 @@ Decryption successful: True
 ```
 
 ### AES-CMAC
-Download cmac.py and run the following command using `mpremote`
+After performing the steps to run AES, download cmac.py and run the following command using `mpremote`
 ```
 mpremote cp cmac.py :
 ```
@@ -66,20 +66,24 @@ Use Ctrl-] or Ctrl-x to exit this shell
 MicroPython v1.24.0-preview.47.g88513d122.dirty on 2024-06-20; NUCLEO-L476RG with STM32L476RG
 Type "help()" for more information.
 >>> import cmac
-
+>>> key          = bytes.fromhex("7fb7b598d7e50457438099994907a2f0")
+>>> message      = bytes.fromhex("b4ffeaa4b4293b6d2077a172e095c819")
+>>> cmac         = cmac.CMAC()
+>>> mac          = cmac.aes_cmac(key, message)
+>>> expected_out = "a53a717d302670eb4970e485c67787be"
+>>> f"CMAC valid: {mac.hex() == expected_out}"
+CMAC valid: True
 ```
 
 ## Testing
-For convenience, I've included two scripts called `cmac-cpython.py` and `aes-cpython` which use popular modern implementations of both algorithms. they are supposed to function identially to the micropython implementation, which makes them a convenient tool for running tests.
+For convenience, I've included two scripts called `cmac-cpython.py` and `aes-cpython.py` which use popular modern implementations of both algorithms. You will have to install the cryptography package with `pip3 install cryptography`. The scripts provide a quick way to compute and test aes and cmac values, which makes them a very convenient tool for running quick tests. Just run them and they will guide you on how to use them.
 
 ## References
-The code for CMAC was taken from `https://github.com/D0ller/CMAC-AES128_for_python3/tree/master` and modified
+The code for CMAC was taken from `https://github.com/D0ller/CMAC-AES128_for_python3/tree/master` and modified.  
 The documentation for cryptolib is available at https://docs.micropython.org/en/latest/library/cryptolib.html
 
 ## Yapping/Rambling 🗣️🗣️🗣️
-points:
-- documentation was ass
-- tried like 5 different things
-- was solved by some guy on discord
-- could find little to no online help
+1. The documentation for working with Micropython is sorely tangled up, as it so often happens with big and old open source projects. Even the 'Getting Started' page is not obviously shown to you when you go through the documentation, first you go through a bunch of pages about its libraries and details about unimportant information like 'Inline assembler for Thumb2 architectures'. Bro i dont care, get to the point.
+2. Secondly, when trying to do as simple as 'implement x algorithm on a development board' i could not find an obvious way to solve the issue. I found like 5 totally different ways of solving the problem and there was not a single clue as to which I should go with. First I tried copying an AES implementation in C and have it compiled and made available in MicroPython. This was a terrible headache which I seriously hope I never have to go through again. Then, I tried compiling it into a .mpy file and getting that to execute on the board which I gave up on probably in less than an hour. On top of all that, I decided to use AES written in pure Micropython and I couldn't even find a SINGLE implementation which didnt have 800 dependencies. WTF!!! I tried a bunch of things and generally had no idea what I was doing the entire time. Micropython project really is an absolute headache for beginners to work with.
+3. After I had given up on everything I could think of, I went looking for online help. Personally I've needed to get online help with a lot of computer stuff in the past and I'd say that I know how to find the right people and ask the right questions. Well with Micropython, I quickly found that most embedded hardware engineers have a great disdain for it (I can see why tbh), and don't even have more than preliminary knowledge about it. This was the most frusturating part of all, because it took me maybe 3-4 days to actually get a hold of someone who knew what he was doing, and even then he couldn't figure out what the issue was for a while. In the end he actually managed to figure out how to run the cryptolib library so I really owe the solution of this project to him.
 

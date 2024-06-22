@@ -73,10 +73,3 @@ class CMAC:
         # Step 7
         return t
 
-if __name__ == '__main__':
-    k = b"\x2b\x7e\x15\x16\x28\xae\xd2\xa6\xab\xf7\x15\x88\x09\xcf\x4f\x3c"
-    m = b"Your message goes here"
-    cmac_instance = CMAC()
-    t = cmac_instance.aes_cmac(k, m)
-    print("CMAC:", hexlify(t))
-

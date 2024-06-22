@@ -1,3 +1,4 @@
+import binascii
 from cryptography.hazmat.primitives import cmac
 from cryptography.hazmat.primitives.ciphers import algorithms
 from cryptography.hazmat.backends import default_backend
@@ -20,20 +21,22 @@ def verify_cmac(key, message, expected_cmac):
     except Exception:
         return False
 
-# Example usage
-#key = b"thisiskey1234567"  # AES key must be either 16, 24, or 32 bytes long
-#message = b"Hello, World!"  # Message to authenticate
-key = b"\x2b\x7e\x15\x16\x28\xae\xd2\xa6\xab\xf7\x15\x88\x09\xcf\x4f\x3c"
-message = b"Your message goes here"
+# Get user input for key and message in hex
+key_hex = input("Enter the key in hex format: ")
+message_hex = input("Enter the message in hex format: ")
+cmac_hex = input("Enter the CMAC in hex format (leave empty to compute): ")
 
-# Compute CMAC
-cmac_result = compute_cmac(key, message)
-print("CMAC:", cmac_result.hex())
+# Convert hex to bytes
+key = binascii.unhexlify(key_hex)
+message = binascii.unhexlify(message_hex)
+expected_cmac = binascii.unhexlify(cmac_hex) if cmac_hex else None
 
-import binascii
-cmac_result = binascii.unhexlify(input("what is the cmac?\n")) or cmac_result
-
-# Check CMAC
-is_valid = verify_cmac(key, message, cmac_result)
-print("Is the CMAC valid?", is_valid)
+# Compute CMAC if not provided
+if not expected_cmac:
+    cmac_result = compute_cmac(key, message)
+    print("Computed CMAC:", cmac_result.hex())
+else:
+    # Check CMAC
+    is_valid = verify_cmac(key, message, expected_cmac)
+    print("CMAC valid:", is_valid)
 
