@@ -79,7 +79,7 @@ CMAC valid: True
 For convenience, I've included two scripts called `cmac-cpython.py` and `aes-cpython.py` which use popular modern implementations of both algorithms. You will have to install the cryptography package with `pip3 install cryptography`. The scripts provide a quick way to compute and test aes and cmac values, which makes them a very convenient tool for running quick tests. Just run them and they will guide you on how to use them.
 
 ## References
-The code for CMAC was taken from `https://github.com/D0ller/CMAC-AES128_for_python3/tree/master` and modified.  
+The code for CMAC was taken from https://github.com/D0ller/CMAC-AES128_for_python3/tree/master and modified.  
 The documentation for cryptolib is available at https://docs.micropython.org/en/latest/library/cryptolib.html
 
 ## Yapping/Rambling 🗣️🗣️🗣️
